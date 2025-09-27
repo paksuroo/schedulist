@@ -1,0 +1,189 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container my-5">
+    {% if user.is_authenticated %}
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary">
+            Welcome back, {{ user.first_name }}!
+        </h1>
+        <p class="lead text-muted">
+            Here's an overview of your tasks and events
+        </p>
+        <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+            <a
+                href="{% url 'todolist:add_task' %}"
+                class="btn btn-primary btn-lg"
+            >
+                <i class="bi bi-plus-circle me-2"></i>Add Task
+            </a>
+            <a
+                href="{% url 'todolist:add_event' %}"
+                class="btn btn-success btn-lg"
+            >
+                <i class="bi bi-calendar-plus me-2"></i>Add Event
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- To-Do List -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div
+                    class="card-header bg-primary text-white d-flex justify-content-between align-items-center"
+                >
+                    <h4 class="mb-0">
+                        <i class="bi bi-list-task me-2"></i>Your To-Do List
+                    </h4>
+                    <span class="badge bg-light text-primary"
+                        >{{ todoitem_list|length }}</span
+                    >
+                </div>
+                <div class="card-body">
+                    {% if todoitem_list %}
+                    <div class="list-group list-group-flush">
+                        {% for todoitem in todoitem_list %}
+                        <div
+                            class="list-group-item d-flex justify-content-between align-items-center py-3 task-item"
+                        >
+                            <div class="d-flex align-items-center">
+                                <i
+                                    class="bi bi-check2-square text-primary me-3"
+                                ></i>
+                                <div>
+                                    <a
+                                        href="{% url 'todolist:viewtodoitem' todoitem.id %}"
+                                        class="text-decoration-none fw-semibold text-dark"
+                                    >
+                                        {{ todoitem.task_name }}
+                                    </a>
+                                    {% if todoitem.description %}
+                                    <p class="small text-muted mb-0 mt-1">
+                                        {{ todoitem.description|truncatewords:10 }}
+                                    </p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% if todoitem.status == 'completed' %}
+                            <span class="badge bg-success">Completed</span>
+                            {% else %}
+                            <span class="badge bg-warning text-dark"
+                                >Pending</span
+                            >
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox display-1 text-muted"></i>
+                        <p class="text-muted mt-3">
+                            No tasks have been created yet.
+                        </p>
+                        <a
+                            href="{% url 'todolist:add_task' %}"
+                            class="btn btn-primary mt-2"
+                        >
+                            <i class="bi bi-plus-circle me-2"></i>Create Your
+                            First Task
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Events -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div
+                    class="card-header bg-success text-white d-flex justify-content-between align-items-center"
+                >
+                    <h4 class="mb-0">
+                        <i class="bi bi-calendar-event me-2"></i>Your Events
+                    </h4>
+                    <span class="badge bg-light text-success"
+                        >{{ event_list|length }}</span
+                    >
+                </div>
+                <div class="card-body">
+                    {% if event_list %}
+                    <div class="list-group list-group-flush">
+                        {% for event in event_list %}
+                        <div class="list-group-item py-3 event-item">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <a href="{% url 'todolist:event' event.id %}" class="text-decoration-none">
+                                    <strong class="text-dark">{{ event.event_name }}</strong>
+                                </a>
+                                <span class="badge
+                                    {% if event.status == 'completed' %}bg-success
+                                    {% elif event.status == 'in progress' %}bg-warning
+                                    {% elif event.status == 'cancelled' %}bg-secondary
+                                    {% else %}bg-info
+                                    {% endif %}">
+                                    {{ event.status|title }}
+                                </span>
+                            </div>
+                            {% if event.event_date %}
+                            <small class="text-muted d-block mb-2">
+                                <i class="bi bi-clock me-1"></i>{{ event.event_date|date:"M d, Y H:i" }}
+                            </small>
+                            {% endif %}
+                            {% if event.description %}
+                            <p class="small text-muted mb-0">{{ event.description|truncatewords:15 }}</p>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-calendar display-1 text-muted"></i>
+                        <p class="text-muted mt-3">
+                            No events have been scheduled yet.
+                        </p>
+                        <a
+                            href="{% url 'todolist:add_event' %}"
+                            class="btn btn-success mt-2"
+                        >
+                            <i class="bi bi-calendar-plus me-2"></i>Schedule
+                            Your First Event
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="hero-section">
+                <h1 class="display-4 fw-bold">Welcome to TaskFlow</h1>
+                <p class="lead">
+                    Your all-in-one productivity solution for managing tasks and
+                    events
+                </p>
+                <p>
+                    Please log in or register to start managing your tasks and
+                    events.
+                </p>
+                <div class="mt-4">
+                    <a
+                        href="{% url 'todolist:login' %}"
+                        class="btn btn-light btn-lg me-3"
+                    >
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                    </a>
+                    <a
+                        href="{% url 'todolist:register' %}"
+                        class="btn btn-outline-light btn-lg"
+                    >
+                        <i class="bi bi-person-plus me-2"></i>Register
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

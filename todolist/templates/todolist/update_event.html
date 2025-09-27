@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Event - TaskFlow{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-success text-white text-center py-4">
+                    <h2><i class="bi bi-calendar-check me-2"></i>Update Event</h2>
+                    <p class="mb-0">Modify your event details</p>
+                </div>
+                <div class="card-body p-4">
+                    
+                    {% if error %}
+                    <div class="alert alert-warning d-flex align-items-center" role="alert">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <div>Event not found or you don't have permission to edit it.</div>
+                    </div>
+                    {% endif %}
+
+                    <form action="{% url 'todolist:update_event' event.id %}" method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Event Name -->
+                        <div class="mb-4">
+                            <label for="event_name" class="form-label fw-semibold">Event Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                                <input class="form-control" id="event_name" type="text" name="event_name" 
+                                       value="{{ form.event_name.value|default:event.event_name }}" maxlength="50" 
+                                       placeholder="Enter event name" required>
+                            </div>
+                            {% if form.event_name.errors %}
+                            <div class="text-danger small mt-1">
+                                {% for error in form.event_name.errors %}
+                                <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-4">
+                            <label for="description" class="form-label fw-semibold">Description</label>
+                            <textarea class="form-control" id="description" name="description" 
+                                      rows="4" placeholder="Describe your event..." required>{{ form.description.value|default:event.description }}</textarea>
+                            {% if form.description.errors %}
+                            <div class="text-danger small mt-1">
+                                {% for error in form.description.errors %}
+                                <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Event Date -->
+                        <div class="mb-4">
+                            <label for="event_date" class="form-label fw-semibold">Event Date & Time</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-clock"></i></span>
+                                <input class="form-control" id="eventDatePicker" type="text" name="event_date" 
+                                       value="{{ form.event_date.value|default:event.event_date|date:'Y-m-d H:i' }}"        placeholder="Select date and time" required>
+                            </div>
+                            {% if form.event_date.errors %}
+                            <div class="text-danger small mt-1">
+                                {% for error in form.event_date.errors %}
+                                <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Status -->
+                        <div class="mb-4">
+                            <label for="status" class="form-label fw-semibold">Status</label>
+                            <select class="form-control" id="status" name="status" required>
+                                <option value="pending" {% if event.status == "pending" or form.status.value == "pending" %}selected{% endif %}>
+                                    <i class="bi bi-clock me-1"></i>Pending
+                                </option>
+                                <option value="in progress" {% if event.status == "in progress" or form.status.value == "in progress" %}selected{% endif %}>
+                                    <i class="bi bi-play-circle me-1"></i>In Progress
+                                </option>
+                                <option value="completed" {% if event.status == "completed" or form.status.value == "completed" %}selected{% endif %}>
+                                    <i class="bi bi-check-circle me-1"></i>Completed
+                                </option>
+                                <option value="cancelled" {% if event.status == "cancelled" or form.status.value == "cancelled" %}selected{% endif %}>
+                                    <i class="bi bi-x-circle me-1"></i>Cancelled
+                                </option>
+                            </select>
+                            {% if form.status.errors %}
+                            <div class="text-danger small mt-1">
+                                {% for error in form.status.errors %}
+                                <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <div class="form-text">Update the current status of your event.</div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-check-circle me-2"></i>Update Event
+                            </button>
+                            <a href="{% url 'todolist:index' %}" class="btn btn-secondary btn-lg">
+                                <i class="bi bi-arrow-left me-2"></i>Back to Events
+                            </a>
+                            <a href="{% url 'todolist:delete_event' event.id %}" class="btn btn-danger btn-lg">
+                                <i class="bi bi-trash me-2"></i>Delete Event
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="card shadow-lg">
+                <div class="card-body py-5">
+                    <i class="bi bi-shield-exclamation text-warning" style="font-size: 4rem;"></i>
+                    <h2 class="mt-3">Access Restricted</h2>
+                    <p class="lead">You need to be logged in to access this page.</p>
+                    <a href="{% url 'todolist:login' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Login Here
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

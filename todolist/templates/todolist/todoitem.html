@@ -1,0 +1,61 @@
+{% extends 'base.html' %} {% block title %}{{ todoitem.task_name }} - Task Details{% endblock %} {% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white py-3">
+                    <h2 class="h4 mb-0">
+                        <i class="bi bi-check2-square me-2"></i>Task Details
+                    </h2>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        <h1 class="h3 text-primary">
+                            {{ todoitem.task_name }}
+                        </h1>
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="h5 text-muted border-bottom pb-2">
+                            Description
+                        </h3>
+                        <p class="lead">{{ todoitem.description }}</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="h5 text-muted border-bottom pb-2">Status</h3>
+                        <span
+                            class="badge {% if todoitem.status == 'completed' %}bg-success{% else %}bg-warning{% endif %} fs-6 p-2"
+                        >
+                            {{ todoitem.status|title }}
+                        </span>
+                    </div>
+
+                    <div
+                        class="d-flex justify-content-center gap-3 mt-4 flex-wrap"
+                    >
+                        <a
+                            href="{% url 'todolist:update_task' todoitem.id %}"
+                            class="btn btn-primary"
+                        >
+                            <i class="bi bi-pencil me-2"></i>Edit Task
+                        </a>
+                        <a
+                            href="{% url 'todolist:delete_task' todoitem.id %}"
+                            class="btn btn-danger"
+                        >
+                            <i class="bi bi-trash me-2"></i>Delete Task
+                        </a>
+                        <a
+                            href="{% url 'todolist:index' %}"
+                            class="btn btn-secondary"
+                        >
+                            <i class="bi bi-arrow-left me-2"></i>Back To Tasks
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

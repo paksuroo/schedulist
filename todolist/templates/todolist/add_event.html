@@ -1,0 +1,96 @@
+{% extends 'base.html' %} {% block title %}Add Event - TaskFlow{% endblock %} {% block content %} {% if user.is_authenticated %}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg">
+                <div
+                    class="card-header bg-gradient-primary text-white text-center py-4"
+                >
+                    <h2>
+                        <i class="bi bi-calendar-plus me-2"></i>Add New Event
+                    </h2>
+                    <p class="mb-0">Schedule your event with all the details</p>
+                </div>
+                <div class="card-body p-4">
+                    {% if error %}
+                    <div
+                        class="alert alert-warning d-flex align-items-center"
+                        role="alert"
+                    >
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <div>An event with this name already exists.</div>
+                    </div>
+                    {% endif %}
+
+                    <form action="{% url 'todolist:add_event' %}" method="post">
+                        {% csrf_token %} {{ form.as_p }}
+
+                        <input type="hidden" name="status" value="pending" />
+
+                        <div class="d-flex justify-content-center gap-3 mt-4">
+                            <button
+                                type="submit"
+                                class="btn btn-success btn-lg"
+                            >
+                                <i class="bi bi-plus-circle me-2"></i>Add Event
+                            </button>
+                            <a
+                                href="{% url 'todolist:index' %}"
+                                class="btn btn-secondary btn-lg"
+                            >
+                                <i class="bi bi-x-circle me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Flatpickr setup -->
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        flatpickr("#eventDatePicker", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            minDate: "today",
+            time_24hr: true,
+        });
+    });
+</script>
+
+{% else %}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="card shadow-lg">
+                <div class="card-body py-5">
+                    <i
+                        class="bi bi-shield-exclamation text-warning"
+                        style="font-size: 4rem"
+                    ></i>
+                    <h2 class="mt-3">Access Restricted</h2>
+                    <p class="lead">
+                        You need to be logged in to access this page.
+                    </p>
+                    <a
+                        href="{% url 'todolist:login' %}"
+                        class="btn btn-primary btn-lg"
+                    >
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Login Here
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %} {% endblock %}

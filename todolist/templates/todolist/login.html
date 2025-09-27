@@ -1,0 +1,103 @@
+{% extends 'base.html' %} {% block title %}Login - TaskFlow{% endblock %} {% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg">
+                <div
+                    class="card-header bg-gradient-primary text-white text-center py-4"
+                >
+                    <h2>
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Login to
+                        TaskFlow
+                    </h2>
+                    <p class="mb-0">
+                        Welcome back! Please sign in to your account.
+                    </p>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Display error message if login failed -->
+                    {% if error %}
+                    <div
+                        class="alert alert-danger d-flex align-items-center"
+                        role="alert"
+                    >
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <div>
+                            Invalid user credentials. Please check your username
+                            and password.
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <form action="{% url 'todolist:login' %}" method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+                            <label for="username" class="form-label fw-semibold"
+                                >Username</label
+                            >
+                            <div class="input-group">
+                                <span class="input-group-text"
+                                    ><i class="bi bi-person"></i
+                                ></span>
+                                <input
+                                    class="form-control"
+                                    id="username"
+                                    type="text"
+                                    name="username"
+                                    value="{{ username }}"
+                                    maxlength="20"
+                                    placeholder="Enter your username"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label fw-semibold"
+                                >Password</label
+                            >
+                            <div class="input-group">
+                                <span class="input-group-text"
+                                    ><i class="bi bi-lock"></i
+                                ></span>
+                                <input
+                                    class="form-control"
+                                    id="password"
+                                    type="password"
+                                    name="password"
+                                    value="{{ password }}"
+                                    maxlength="20"
+                                    placeholder="Enter your password"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button
+                                class="btn btn-primary btn-lg"
+                                type="submit"
+                            >
+                                <i class="bi bi-box-arrow-in-right me-2"></i
+                                >Login
+                            </button>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <p>
+                                Don't have an account?
+                                <a
+                                    href="{% url 'todolist:register' %}"
+                                    class="text-decoration-none"
+                                    >Register here</a
+                                >
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

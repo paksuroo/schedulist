@@ -1,0 +1,201 @@
+{% extends 'base.html' %} {% block title %}Register - TaskFlow{% endblock %} {% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow-lg">
+                <div
+                    class="card-header bg-gradient-primary text-white text-center py-4"
+                >
+                    <h2>
+                        <i class="bi bi-person-plus me-2"></i>Create Your
+                        Account
+                    </h2>
+                    <p class="mb-0">
+                        Join TaskFlow and boost your productivity today!
+                    </p>
+                </div>
+                <div class="card-body p-4">
+                    {% if error %}
+                    <div
+                        class="alert alert-danger d-flex align-items-center"
+                        role="alert"
+                    >
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <div>
+                            Invalid user credentials. Please check if your
+                            passwords match.
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <form action="{% url 'todolist:register' %}" method="post">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label
+                                    for="username"
+                                    class="form-label fw-semibold"
+                                    >Username</label
+                                >
+                                <div class="input-group">
+                                    <span class="input-group-text"
+                                        ><i class="bi bi-person"></i
+                                    ></span>
+                                    <input
+                                        class="form-control"
+                                        id="username"
+                                        type="text"
+                                        name="username"
+                                        value="{{ username }}"
+                                        maxlength="50"
+                                        placeholder="Choose a username"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label
+                                    for="email"
+                                    class="form-label fw-semibold"
+                                    >Email</label
+                                >
+                                <div class="input-group">
+                                    <span class="input-group-text"
+                                        ><i class="bi bi-envelope"></i
+                                    ></span>
+                                    <input
+                                        class="form-control"
+                                        id="email"
+                                        type="email"
+                                        name="email"
+                                        value="{{ email }}"
+                                        maxlength="50"
+                                        placeholder="your@email.com"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label
+                                    for="first_name"
+                                    class="form-label fw-semibold"
+                                    >First Name</label
+                                >
+                                <div class="input-group">
+                                    <span class="input-group-text"
+                                        ><i class="bi bi-person-circle"></i
+                                    ></span>
+                                    <input
+                                        class="form-control"
+                                        id="first_name"
+                                        type="text"
+                                        name="first_name"
+                                        value="{{ first_name }}"
+                                        maxlength="50"
+                                        placeholder="First name"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label
+                                    for="last_name"
+                                    class="form-label fw-semibold"
+                                    >Last Name</label
+                                >
+                                <div class="input-group">
+                                    <span class="input-group-text"
+                                        ><i class="bi bi-person-circle"></i
+                                    ></span>
+                                    <input
+                                        class="form-control"
+                                        id="last_name"
+                                        type="text"
+                                        name="last_name"
+                                        value="{{ last_name }}"
+                                        maxlength="50"
+                                        placeholder="Last name"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label
+                                    for="password"
+                                    class="form-label fw-semibold"
+                                    >Password</label
+                                >
+                                <div class="input-group">
+                                    <span class="input-group-text"
+                                        ><i class="bi bi-lock"></i
+                                    ></span>
+                                    <input
+                                        class="form-control"
+                                        id="password"
+                                        type="password"
+                                        name="password"
+                                        value="{{ password }}"
+                                        maxlength="50"
+                                        placeholder="Create a password"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label
+                                    for="confirm_password"
+                                    class="form-label fw-semibold"
+                                    >Confirm Password</label
+                                >
+                                <div class="input-group">
+                                    <span class="input-group-text"
+                                        ><i class="bi bi-lock-fill"></i
+                                    ></span>
+                                    <input
+                                        class="form-control"
+                                        id="confirm_password"
+                                        type="password"
+                                        name="confirm_password"
+                                        value="{{ confirm_password }}"
+                                        maxlength="20"
+                                        placeholder="Confirm your password"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button
+                                class="btn btn-success btn-lg"
+                                type="submit"
+                            >
+                                <i class="bi bi-person-plus me-2"></i>Create
+                                Account
+                            </button>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <p>
+                                Already have an account?
+                                <a
+                                    href="{% url 'todolist:login' %}"
+                                    class="text-decoration-none"
+                                    >Login here</a
+                                >
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
