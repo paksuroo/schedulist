@@ -16,9 +16,9 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 SECRET_KEY = 'django-insecure-n0j1qkn6+yg$%m@f6u@fsr-+wg=zmuk=isi%l76ajjp-bi-rx6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".onrender.com"]
 
 
 # Application definition
@@ -72,9 +72,9 @@ WSGI_APPLICATION = 'discussion.wsgi.application'
 
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.environ.get("DATABASE_URL"),  # Render will set this
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",  
         conn_max_age=600,
-        ssl_require=True,
+        ssl_require=False if DEBUG else True, 
     )
 }
 
@@ -98,8 +98,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -109,13 +107,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+CSRF_TRUSTED_ORIGINS = ["https://*.onrender.com"]
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
